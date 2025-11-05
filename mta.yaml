@@ -19,11 +19,16 @@ modules:
     builder: npm-ci
 - name: MyHanaApp-db-deployer
   type: hdb
-  path: gen/db
+  path: db
   requires:
   - name: MyHanaApp-db
   parameters:
     buildpack: nodejs_buildpack
+  build-parameters:
+    requires:
+    - name: db-src
+      artifacts: []
+      target-path: src/
 - name: MyHanaApp
   type: approuter.nodejs
   path: app/router
@@ -73,6 +78,11 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: db-src
+  type: hdb
+  path: db/src
+  build-parameters:
+    build-result: src
 resources:
 - name: MyHanaApp-db
   type: com.sap.xs.hdi-container
